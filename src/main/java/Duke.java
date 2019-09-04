@@ -1,266 +1,127 @@
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
+//import MyPackage.Task;
 
 public class Duke {
 
-    public static void level_1() {
-        System.out.println("Hello! I'm Duke \n" + "What can I do for you?");
+    public static void level_7() throws DukeException {
 
-        for (;;) {
-            Scanner scan = new Scanner(System.in);
-
-            String message = scan.nextLine();
-
-            if (Objects.equals(message, "bye")) {
-                System.out.println("Bye. Hope to see you again soon!");
-                break;
-            }
-
-            System.out.println(message);
-        }
-    }
-
-    public static void level_2() {
         int i = 0;
-        String[] stored_list = new String[100];
+        ArrayList<String> stored_list = new ArrayList<String>();
+        ArrayList<Task> tasks = new ArrayList<Task>();
 
-        for (;;) {
-            Scanner scan = new Scanner(System.in);
+        while (true) {
+            while (true) {
+                Scanner scan = new Scanner(System.in);
+                String message = scan.nextLine();
+                Task task = new Task(message);
+                String str1 = null;
+                String check = null;
 
-            String message = scan.nextLine();
-
-            if (Objects.equals(message, "bye")) {
-                System.out.println("Bye. Hope to see you again soon!");
-                break;
-            }
-
-            i++;
-
-            if (Objects.equals(message, "list")) {
-                for (int j = 1; j < i; j++) {
-                    System.out.println(j + ". " + stored_list[j]);
+                if (message.contains(" ")) {
+                    String[] str2 = task.description.split(" ", 2);
+                    check = str2[0];
+                    str1 = str2[1];
                 }
 
-                i--;
-            } else {
-                stored_list[i] = message;
+                if (Objects.equals(task.description, "bye")) {
+                    System.out.println("Bye. Hope to see you again soon!");
+                    return;
+                } else if (task.description.equals("todo")) {
+                    System.out.println("☹ OOPS!!! The description of a todo cannot be empty.");
+                } else if (task.description.equals("event")) {
+                    System.out.println("Which event?");
+                } else if (task.description.equals("deadline")) {
+                    System.out.println("Deadline of what?");
+                } else if (Objects.equals(task.description, "list")) {
+                    if (i == 0) {
+                        System.out.println("☹ OOPS!!! Empty list!");
+                    }
+                    for (int j = 0; j < stored_list.size(); ++j) {
+                        System.out.println(j + 1 + "." + stored_list.get(j));
+                    }
+                } else if (Objects.equals(check, "done")) {
+                    try {
+                        int number = Integer.parseInt(str1) - 1;
+                        tasks.get(number).markAsDone();
+                        stored_list.set(number, tasks.get(number).toString());
+                        System.out.println("Nice! I've marked this task as done:\n " + tasks.get(number));
+                    } catch (IndexOutOfBoundsException ex) {
+                        System.out.println("The task number do not exist!");
+                    } catch (NumberFormatException ex) {
+                        System.out.println("Oh no, invalid task number!");
+                    }
+                } else if (Objects.equals(check, "delete")) {
+                    try {
+                        int number = Integer.parseInt(str1) - 1;
+                        String deleted_task = stored_list.get(number);
+                        stored_list.remove(number);
+                        System.out.println("Noted. I've removed this task:\n " + deleted_task + "\nNow you have " + stored_list.size() + " tasks in the list.");
+                    } catch (IndexOutOfBoundsException ex) {
+                        System.out.println("The task number do not exist!");
+                    } catch (NumberFormatException ex) {
+                        System.out.println("Oh no, invalid task number!");
+                    }
+                } else if (Objects.equals(check, "find")) {
+                    int j = 0;
+                    System.out.println("Here are the matching tasks in your list:");
 
-                System.out.println("added: " + message);
-            }
-        }
-    }
+                    for (String temp : stored_list) {
+                        if (temp.contains(str1)) {
+                            j++;
+                            System.out.println(j + "." + temp);
+                        }
+                    }
 
-    public static void level_3() {
-        int i = 0;
-        String[] stored_list = new String[100];
-        String[] stored_message = new String[100];
-
-        for (;;) {
-            Scanner scan = new Scanner(System.in);
-
-            String message = scan.nextLine();
-
-            int number = 0;
-            String str1 = null;
-            String check = null;
-
-            if (message.contains(" ")) {
-                String[] str2 = message.split(" ", 2);
-                check = str2[0];
-                str1 = str2[1];
-            }
-
-            if (Objects.equals(message, "bye")) {
-                System.out.println("Bye. Hope to see you again soon!");
-                break;
-            }
-
-            i++;
-
-            if (Objects.equals(message, "list")) {
-                for (int j = 1; j < i; j++) {
-                    System.out.println(stored_list[j]);
-                }
-
-                i--;
-            } else if (Objects.equals(check, "done")) {
-                number = Integer.parseInt(str1);
-
-                stored_list[number] = number + "." + "[\u2713]" + " " + stored_message[number];
-
-                i--;
-
-                System.out.println("Nice! I've marked this task as done:\n" + "[\u2713]" + " " + stored_message[number]);
-            } else {
-                stored_message[i] = message;
-                stored_list[i] = i + "." + "[\u2718]" + " " + message;
-
-                System.out.println("added: " + message);
-            }
-        }
-    }
-
-    public static void level_4() {
-        int i = 0;
-        String[] stored_list = new String[100];
-        String[] stored_message = new String[100];
-        String[] tasks = new String[100];
-
-        for (;;) {
-            Scanner scan = new Scanner(System.in);
-
-            String message = scan.nextLine();
-
-            int number = 0;
-            String str1 = null;
-            String check = null;
-
-            if (message.contains(" ")) {
-                String[] str2 = message.split(" ", 2);
-                check = str2[0];
-                str1 = str2[1];
-            }
-
-            if (Objects.equals(message, "bye")) {
-                System.out.println("Bye. Hope to see you again soon!");
-                break;
-            }
-
-            i++;
-
-            if (Objects.equals(message, "list")) {
-                for (int j = 1; j < i; j++) {
-                    System.out.println(j + "." + (stored_list[j]));
-                }
-
-                i--;
-            } else if (Objects.equals(check, "done") && Integer.parseInt(str1) < i && Integer.parseInt(str1) != 0) {
-                number = Integer.parseInt(str1);
-
-               // stored_list[number] = tasks[i] + "[\u2713]" + " " + stored_message[number];
-                stored_list[number] = stored_list[number].replace("[\u2718]", "[\u2713]");
-
-                System.out.println("Nice! I've marked this task as done:\n" +  stored_list[number]);
-
-                i--;
-            } else {
-
-                if (Objects.equals(check, "deadline")) {
-                    String[] str3 = str1.split("/", 2);
-                    String str4 = str3[1].replace("by", "by:");
-                    stored_message[i] = str3[0] + "(" + str4 + ")";
-                    tasks[i] = "[D]";
-                    stored_list[i] = tasks[i] + "[\u2718]" + " " + stored_message[i];
-                    System.out.println("Got it. I've added this task:\n" + " " + stored_list[i] + "\n" + "Now you have " + i + " tasks in the list.");
-                } else if (Objects.equals(check, "event")) {
-                    String[] str3 = str1.split("/", 2);
-                    String str4 = str3[1].replace("at", "at:");
-                    stored_message[i] = str3[0] + "(" + str4 + ")";
-                    tasks[i] = "[E]";
-                    stored_list[i] = tasks[i] + "[\u2718]" + " " + stored_message[i];
-                    System.out.println("Got it. I've added this task:\n" + " " + stored_list[i] + "\n" + "Now you have " + i + " tasks in the list.");
-                } else if (Objects.equals(check, "todo")) {
-                    stored_message[i] = str1;
-                    tasks[i] = "[T]";
-                    stored_list[i] = tasks[i] + "[\u2718]" + " " + stored_message[i];
-                    System.out.println("Got it. I've added this task:\n" + " " + stored_list[i] + "\n" + "Now you have " + i + " tasks in the list.");
+                    if (j == 0) {
+                        System.out.println("Oops, no matching found!");
+                    }
                 } else {
-                    i--;
-                }
-            }
-        }
-    }
+                    if (Objects.equals(check, "deadline")) {
+                        try {
+                            String[] str3 = str1.split("/", 2);
+                            String str4 = str3[1].replace("by ", "");
+                            Task info = new Task(str3[0]);
+                            tasks.add(new Deadline(info.description, str4));
+                            stored_list.add(tasks.get(i).toString());
+                            System.out.println("Got it. I've added this task:\n" + " " + stored_list.get(i) + "\n" + "Now you have " + stored_list.size() + " tasks in the list.");
+                        } catch (IndexOutOfBoundsException | ParseException ex) {
+                            System.out.println("When's the deadline? :o\n(Format of deadline: dd/mm/yyyy TIME)");
+                        }
+                    } else if (Objects.equals(check, "event")) {
+                        try {
+                            String[] str3 = str1.split("/", 2);
+                            String str4 = str3[1].replace("at ", "");
+                            Task info = new Task(str3[0]);
+                            System.out.println(str3[0]);
+                            tasks.add(new Event(info.description, str4));
+                            stored_list.add(tasks.get(i).toString());
+                            System.out.println("Got it. I've added this task:\n" + " " + stored_list.get(i) + "\n" + "Now you have " + stored_list.size() + " tasks in the list.");
+                        } catch (IndexOutOfBoundsException | ParseException ex) {
+                            System.out.println("When's the event? :o\n(Format of event: dd/mm/yyyy TIME)");
+                        }
+                    } else if (Objects.equals(check, "todo")) {
+                        Task info = new Task(str1);
+                        tasks.add(new ToDo(info.description));
+                        stored_list.add(tasks.get(i).toString());
+                        System.out.println("Got it. I've added this task:\n" + " " + stored_list.get(i) + "\n" + "Now you have " + stored_list.size() + " tasks in the list.");
+                    } else {
+                        --i;
+                        try {
+                            throw new DukeException("unknown");
+                        } catch (DukeException ex) { }
+                    }
 
-    public static void level_5() {
-        int i = 0;
-        String[] stored_list = new String[100];
-        String[] stored_message = new String[100];
-        String[] tasks = new String[100];
-
-        for (;;) {
-            Scanner scan = new Scanner(System.in);
-
-            String message = scan.nextLine();
-
-            int number = 0;
-            int flag = 1;
-            String str1 = null;
-            String check = null;
-
-
-            if (message.contains(" ")) {
-                String[] str2 = message.split(" ", 2);
-                check = str2[0];
-                str1 = str2[1];
-            } else {
-                flag = 0;
-            }
-
-            if (Objects.equals(message, "bye")) {
-                System.out.println("Bye. Hope to see you again soon!");
-                break;
-            }
-
-            i++;
-
-            if (Objects.equals(message, "list")) {
-                for (int j = 1; j < i; j++) {
-                    System.out.println(j + "." + (stored_list[j]));
-                }
-
-                i--;
-            } else if (Objects.equals(check, "done") && Integer.parseInt(str1) < i && Integer.parseInt(str1) != 0) {
-                number = Integer.parseInt(str1);
-
-                // stored_list[number] = tasks[i] + "[\u2713]" + " " + stored_message[number];
-                stored_list[number] = stored_list[number].replace("[\u2718]", "[\u2713]");
-
-                System.out.println("Nice! I've marked this task as done:\n" +  stored_list[number]);
-
-                i--;
-            } else if (flag == 1) {
-
-                if (Objects.equals(check, "deadline")) {
-                    String[] str3 = str1.split("/", 2);
-                    String str4 = str3[1].replace("by", "by:");
-                    stored_message[i] = str3[0] + "(" + str4 + ")";
-                    tasks[i] = "[D]";
-                    stored_list[i] = tasks[i] + "[\u2718]" + " " + stored_message[i];
-                    System.out.println("Got it. I've added this task:\n" + " " + stored_list[i] + "\n" + "Now you have " + i + " tasks in the list.");
-                } else if (Objects.equals(check, "event")) {
-                    String[] str3 = str1.split("/", 2);
-                    String str4 = str3[1].replace("at", "at:");
-                    stored_message[i] = str3[0] + "(" + str4 + ")";
-                    tasks[i] = "[E]";
-                    stored_list[i] = tasks[i] + "[\u2718]" + " " + stored_message[i];
-                    System.out.println("Got it. I've added this task:\n" + " " + stored_list[i] + "\n" + "Now you have " + i + " tasks in the list.");
-                } else if (Objects.equals(check, "todo")) {
-                    stored_message[i] = str1;
-                    tasks[i] = "[T]";
-                    stored_list[i] = tasks[i] + "[\u2718]" + " " + stored_message[i];
-                    System.out.println("Got it. I've added this task:\n" + " " + stored_list[i] + "\n" + "Now you have " + i + " tasks in the list.");
-                } else {
-                    i--;
-                }
-            } else {
-                if (Objects.equals(message, "todo")) {
-                    System.out.println("☹ OOPS!!! The description of a " + message + " cannot be empty.");
-                } else if (Objects.equals(message, "deadline")) {
-                    System.out.println("☹ OOPS!!! The description of a " + message + " cannot be empty.");
-                } else if (Objects.equals(message, "event")) {
-                    System.out.println("☹ OOPS!!! The description of a " + message + " cannot be empty.");
-                } else {
-                    System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
+                    ++i;
                 }
             }
         }
     }
 
 
-
-
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws DukeException {
         String logo = " ____        _        \n"
                 + "|  _ \\ _   _| | _____ \n"
                 + "| | | | | | | |/ / _ \\\n"
@@ -268,12 +129,10 @@ public class Duke {
                 + "|____/ \\__,_|_|\\_\\___|\n";
         System.out.println("Hello from\n" + logo);
 
-        //level_1();
-        //level_2();
-        //level_3();
-        //level_4();
-        level_5();
+        level_7();
+
     }
+
 }
 
 
