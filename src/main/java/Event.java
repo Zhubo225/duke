@@ -8,8 +8,8 @@ public class Event extends Task {
     SimpleDateFormat formatter;
     Date date;
 
-    public Event(String description, String at) throws ParseException {
-        super(description);
+    public Event(String description, String type, String at) throws ParseException {
+        super(description, type);
         this.at = at;
         formatter = new SimpleDateFormat("dd/MM/yyyy HHmm");
         date = formatter.parse(at);
@@ -18,5 +18,13 @@ public class Event extends Task {
     @Override
     public String toString() {
         return "[E][" + getStatusIcon() + "] " + description + "(at: " + date + ")";
+    }
+
+    public String savedDescription() {
+        return description;
+    }
+
+    public String savedDate() {
+        return at;
     }
 }

@@ -7,7 +7,7 @@ public class ConvertDateAndTime {
     private static String str;
 
     public ConvertDateAndTime (String str){
-        this.str = str;
+        ConvertDateAndTime.str = str;
     }
 
     public static void main(String[] argv) {

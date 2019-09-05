@@ -8,8 +8,8 @@ public class Deadline extends Task {
     SimpleDateFormat formatter;
     Date date;
 
-    public Deadline(String description, String by) throws ParseException {
-        super(description);
+    public Deadline(String description, String type, String by) throws ParseException {
+        super(description, type);
         this.by = by;
         formatter = new SimpleDateFormat("dd/MM/yyyy HHmm");
         date = formatter.parse(by);
@@ -18,5 +18,13 @@ public class Deadline extends Task {
     @Override
     public String toString() {
         return "[D][" + getStatusIcon() + "] " + description + "(by: " + date + ")";
+    }
+
+    public String savedDescription() {
+        return description;
+    }
+
+    public String savedDate() {
+        return by;
     }
 }
